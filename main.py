@@ -1,5 +1,46 @@
 import sqlite3 as db
 
+def showData(limit=None):
+	# Takes in 0 or 1 parameter. if provided one parameter that is the # of data we want to select. 
+	# If 0 parameters are given shows EVERYTHING in the database
+	if( limit <= 0 or type(limit) != int ):
+		print("Invalid Type of Parameter")
+	else:
+	#Displays all the data in the Crime Table
+		conn = db.connect('crime.db')
+		cursor = conn.cursor()
+		counter = 0
+		for data in cursor.execute("SELECT * FROM Crime"):
+			if(limit is None):
+				print data
+			else:
+				if(counter == limit):
+					break
+				else:
+					print data
+					counter = counter + 1
+		conn.close()
+	return
+
+
+if __name__ == "__main__":
+	showData(1);
+
+
+
+
+
+
+
+
+
+
+
+
+#  -----------------------------------------------------------------------------------------------------
+# | DATA INSERTION METHODS ARE FOUND HERE: createTable() , insertData(). DO NOT TOUCH OR MODIFY OR USE |
+#  -----------------------------------------------------------------------------------------------------
+
 def createTable():
 	#Creates the table in the database we need 
 	#This table will be Crime(String date,String Time, String IncidentType,String WeaponType)
@@ -18,7 +59,6 @@ def createTable():
 
 	conn.commit()
 	print("Successfully created Crime Table")
-
 
 def insertData():
 	#Takes in our csv data and puts it into our crime.db which is just a local database. 
@@ -40,29 +80,5 @@ def insertData():
 	print("Successfully inserted into database")
 	conn.commit()
 	data.close()
-
-
-def showData():
-	#Displays all the data in the Crime Table
-	conn = db.connect('crime.db')
-	cursor = conn.cursor()
-	
-	for data in cursor.execute("SELECT * FROM Crime"):
-		print data
-
-	conn.close()
-
-
-if __name__ == "__main__":
-	createTable()
-	insertData()
-	showData()
-
-
-
-
-
-
-
 
 
