@@ -3,7 +3,7 @@ import sqlite3 as db
 def showData(limit=None):
 	# Takes in 0 or 1 parameter. if provided one parameter that is the # of data we want to select. 
 	# If 0 parameters are given shows EVERYTHING in the database
-	if( limit <= 0 or type(limit) != int ):
+	if(limit is not None):
 		print("Invalid Type of Parameter")
 	else:
 	#Displays all the data in the Crime Table
@@ -24,8 +24,7 @@ def showData(limit=None):
 
 
 if __name__ == "__main__":
-	showData(1);
-
+	showData();
 
 
 
@@ -38,7 +37,7 @@ if __name__ == "__main__":
 
 
 #  -----------------------------------------------------------------------------------------------------
-# | DATA INSERTION METHODS ARE FOUND HERE: createTable() , insertData(). DO NOT TOUCH OR MODIFY OR USE |
+# | DATA INSERTION METHODS ARE FOUND HERE: createTable() , insertData(), cleanData DO NOT TOUCH OR MODIFY OR USE |
 #  -----------------------------------------------------------------------------------------------------
 
 def createTable():
@@ -53,9 +52,8 @@ def createTable():
 		print("Successfully dropped Crime Table")
 	except:
 		print("No Crime Table Found")
-
 	cursor.execute('''CREATE Table Crime 
-				(date varchar(255), day varchar(255), Time varchar(255),  IncType varchar(255), WepType varchar(255)); ''')
+				(Inc_Type_Desc varchar(255), Time varchar(255), WeaponType varchar(255),  Shooting varchar(255), DayWeek varchar(255)); ''')
 
 	conn.commit()
 	print("Successfully created Crime Table")
@@ -66,19 +64,32 @@ def insertData():
 
 	conn = db.connect('crime.db')
 	cursor = conn.cursor()
-	
-	data = open("crime.csv")
+	data = open("new_crime.csv")
 	counter = 0
 	for x in data:
 		if counter == 0:
 			counter = counter + 1
 		else:
 			x = x.split(",")
-			date = x[6].split(" ")[0]
-			time = x[6].split(" ")[1]
-			cursor.execute(('''INSERT INTO Crime VALUES('%s','%s','%s','%s','%s')'''%(date,x[13],time,x[2],x[7])))
+			cursor.execute(('''INSERT INTO Crime VALUES('%s','%s','%s','%s','%s')'''%(x[0],x[1],x[2],x[3],x[4])))
 	print("Successfully inserted into database")
 	conn.commit()
 	data.close()
+
+# def cleanData():
+# 	#Takes our crime.csv and cleans up the data so that the new csv only contain 
+# 	#the data we need so database insertion is easy.
+# 	data = open('crime.csv')
+# 	new_data = open('new_crime.csv', 'w')
+
+# 	crimes = ['RESIDENTIAL BURGLARY', 'AGGRAVATED ASSAULT', 'ROBBERY', 'COMMERCIAL BURGLARY', 'SIMPLE ASSAULT', 'FRAUD', 'WEAPONS CHARGE', 'DRUG CHARGES', 'OTHER LARCENY', 'AUTO THEFT', 'VANDALISM', 'CRIMES AGAINST CHILDREN', 'LARCENY FROM MOTOR VEHICLE', 'EMBEZELLMENT']
+# 	print('INCIDENT_TYPE_DESCRIPTION' + ',' + 'TIME' + ',' + 'WEAPONTYPE' + ',' + 'SHOOTING' + ',' + 'DAY_WEEK', file = new_data)
+
+# 	for row in data:
+# 	    x = row.split(',')
+# 	    if x[2] in crimes:
+# 	        from_date = x[6].split(' ')
+# 	        time = from_date[1]        
+# 	        print(x[2] + ',' + time + ',' + x[7] + ',' + x[8] + ',' + x[13], file = new_data)
 
 
