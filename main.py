@@ -119,21 +119,6 @@ def KindsOfCrime():
 #******************************************************************************************************************
 
 
-if __name__ == "__main__":
-	#Will delete any prior tables and create a new Table and insert the csv specified into the db
-	#createTable()
-	#insertData()
-
-	#Shows data from the database
-	# data = showData()
-
-	#Display Data
-	#crimesPerDay(data)
-	#crimesPerHour(data)
-	#KindsOfCrime()
-	pass
-
-
 #  ---------------------------------------------------------------------------------------------------------------
 # | DATA INSERTION METHODS ARE FOUND HERE: createTable() , insertData(), cleanData DO NOT TOUCH OR MODIFY OR USE |
 #  ---------------------------------------------------------------------------------------------------------------
@@ -173,24 +158,100 @@ def insertData():
 	conn.commit()
 	data.close()
 #******************************************************************************************************************
-#def cleanData():
+def cleanData():
 	#Takes our crime.csv and cleans up the data so that the new csv only contain 
 	#the data we need so database insertion is easy.
-	# data = open('crime.csv')
-	# new_data = open('new_crime.csv', 'w')
+	data = open('crime.csv')
+	new_data = open('new_crime.csv', 'w')
 
-	# crimes = ['RESIDENTIAL BURGLARY', 'AGGRAVATED ASSAULT', 'ROBBERY', 'COMMERCIAL BURGLARY', 'SIMPLE ASSAULT', 'FRAUD', 'WEAPONS CHARGE', 'DRUG CHARGES', 'OTHER LARCENY', 'AUTO THEFT', 'VANDALISM', 'CRIMES AGAINST CHILDREN', 'LARCENY FROM MOTOR VEHICLE', 'EMBEZELLMENT']
-	# print('INCIDENT_TYPE_DESCRIPTION' + ',' + 'TIME' + ',' + 'WEAPONTYPE' + ',' + 'SHOOTING' + ',' + 'DAY_WEEK', file = new_data)
+	crimes = ['RESIDENTIAL BURGLARY', 'AGGRAVATED ASSAULT', 'ROBBERY', 'COMMERCIAL BURGLARY', 'SIMPLE ASSAULT', 'FRAUD', 'WEAPONS CHARGE', 'DRUG CHARGES', 'OTHER LARCENY', 'AUTO THEFT', 'VANDALISM', 'CRIMES AGAINST CHILDREN', 'LARCENY FROM MOTOR VEHICLE', 'EMBEZELLMENT']
+	#print('INCIDENT_TYPE_DESCRIPTION' + ',' + 'TIME' + ',' + 'WEAPONTYPE' + ',' + 'SHOOTING' + ',' + 'DAY_WEEK', file = new_data)
 
-	# for row in data:
-	#     x = row.split(',')
-	#     if x[2] in crimes:
-	#         from_date = x[6].split(' ')
-	#         if str(from_date[1][:2]) == '12' and from_date[2] == 'AM':
-	#             time = '00' + str(from_date[1][2:])
-	#         elif from_date[2] == 'PM' and str(from_date[1][:2]) != '12':
-	#             time = str(int(from_date[1][:2]) + 12) + str(from_date[1][2:])
-	#         else:
-	#             time = from_date[1]
-	#         print(x[2] + ',' + time + ',' + x[7] + ',' + x[8] + ',' + x[13], file = new_data)
+	for row in data:
+	    x = row.split(',')
+	    if x[2] in crimes:
+	        from_date = x[6].split(' ')
+	        if str(from_date[1][:2]) == '12' and from_date[2] == 'AM':
+	            time = '00' + str(from_date[1][2:])
+	        elif from_date[2] == 'PM' and str(from_date[1][:2]) != '12':
+	            time = str(int(from_date[1][:2]) + 12) + str(from_date[1][2:])
+	        else:
+	            time = from_date[1]
+	#Commented cause it raises a file error because of the file=new_data when ran
+	#print(x[2] + ',' + time + ',' + x[7] + ',' + x[8] + ',' + x[13], file = new_data)
+	
+#  ---------------------------------------------------------------------------------------------------------------
+# | SQL METHODS ARE FOUND HERE:  DO NOT TOUCH OR MODIFY OR USE |
+#  ---------------------------------------------------------------------------------------------------------------
+#******************************************************************************************************************
+
+def sqlQuery():
+
+	# Connect to the database and create a cursor for it.
+	filename = 'crime.db'
+	db = sqlite3.connect(filename)
+	cursor = db.cursor()
+
+	# Get the year from the user and build the SELECT command
+	# using string concatenation.
+	print('number of crimes per day of the week, in descending order')
+	command = '''SELECT DayWeek, COUNT(*)
+	FROM Crime
+	GROUP BY DayWeek
+	ORDER BY COUNT(*) desc;'''
+
+	# Execute the command.
+	cursor.execute(command)
+
+	# Iterate over the results and print them out.
+	for tuple in cursor:
+	    if tuple[0] != 'Saturda':
+	        print(tuple[0], tuple[1])
+
+
+	command = '''SELECT COUNT(*)
+	             FROM Crime
+	             WHERE DayWeek = 'Friday'AND Time < "12:00:00";'''
+
+	cursor.execute(command)
+
+	for tuple in cursor:
+	    before6 = tuple[0]
+
+	command = '''SELECT COUNT(*)
+	             FROM Crime
+	             WHERE DayWeek = 'Friday'AND Time >= "12:00:00";'''
+
+	cursor.execute(command)
+
+	for tuple in cursor:
+	    after6 = tuple[0]
+
+	print('number of crimes committed on friday before noon vs after:')
+	print(before6, after6)
+
+	db.commit()
+	db.close()
+	
+#  ---------------------------------------------------------------------------------------------------------------
+# | Main Function Found Here, Commented out all the calls but you can uncomment them and call them               |
+#  ---------------------------------------------------------------------------------------------------------------
+#******************************************************************************************************************
+
+
+if __name__ == "__main__":
+	#Will delete any prior tables and create a new Table and insert the csv specified into the db
+	#createTable()
+	#insertData()
+
+	#Shows data from the database
+	data = showData()
+
+	#Display Data
+	crimesPerDay(data)
+	#crimesPerHour(data)
+	#KindsOfCrime()
+	pass
+
+
 
