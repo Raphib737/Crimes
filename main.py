@@ -1,30 +1,55 @@
 import sqlite3 as db
+import matplotlib.pyplot as plt
+from numpy.random import normal
+import random
 
 def showData(limit=None):
 	# Takes in 0 or 1 parameter. if provided one parameter that is the # of data we want to select. 
 	# If 0 parameters are given shows EVERYTHING in the database
-	if(limit is not None):
-		print("Invalid Type of Parameter")
-	else:
-	#Displays all the data in the Crime Table
-		conn = db.connect('crime.db')
-		cursor = conn.cursor()
-		counter = 0
-		for data in cursor.execute("SELECT * FROM Crime"):
-			if(limit is None):
-				print data
-			else:
-				if(counter == limit):
-					break
-				else:
-					print data
-					counter = counter + 1
-		conn.close()
-	return
 
+	#Displays all the data in the Crime Table
+	conn = db.connect('crime.db')
+	cursor = conn.cursor()
+	counter = 0
+	partialData = []
+	for data in cursor.execute("SELECT * FROM Crime"):
+		if(limit is None):
+			partialData.append(data)
+		else:
+			if(counter == limit):
+				break
+			else:
+				partialData.append(data)
+				counter = counter + 1
+	conn.close()
+
+	for x in partialData:
+		print x
+	return partialData
+
+
+# def getData():
+# 	# Returns all the data in the database that cna be used to parse the data 	
+# 	# 
+# 	conn = db.connect('crime.db')
+# 	cursor = conn.cursor()
+
+# 	data = cursor.execute("SELECT * FROM Crime")
+# 	data = data.fetchall()	
+
+# 	conn.close()
+# 	return data
+
+def crimesPerHour(data):
+	pass
 
 if __name__ == "__main__":
-	showData();
+	data = showData(10)
+	
+	timeOfEvents = {"Sunday":1,"Monday":2,"Tuesday":3,"Wednesday":4,"Thursday":5,"Friday":6,"Saturday":7}
+
+
+
 
 
 
@@ -42,7 +67,7 @@ if __name__ == "__main__":
 
 def createTable():
 	#Creates the table in the database we need 
-	#This table will be Crime(String date,String Time, String IncidentType,String WeaponType)
+	#This table will be Crime(String Inc_Type, String Time, String WeaponType,String Shooting,String DayWeek)
 	#If you would like to add another table change Line #16 with your new table
 	conn = db.connect('crime.db')
 	cursor = conn.cursor()
@@ -71,7 +96,7 @@ def insertData():
 			counter = counter + 1
 		else:
 			x = x.split(",")
-			cursor.execute(('''INSERT INTO Crime VALUES('%s','%s','%s','%s','%s')'''%(x[0],x[1],x[2],x[3],x[4])))
+			cursor.execute(('''INSERT INTO Crime VALUES('%s','%s','%s','%s','%s')'''%(x[0],x[1],x[2],x[3],x[4][:-1])))
 	print("Successfully inserted into database")
 	conn.commit()
 	data.close()
