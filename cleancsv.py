@@ -14,5 +14,10 @@ for row in data:
     x = row.split(',')
     if x[2] in crimes:
         from_date = x[6].split(' ')
-        time = from_date[1]        
+        if str(from_date[1][:2]) == '12' and from_date[2] == 'AM':
+            time = '00' + str(from_date[1][2:])
+        elif from_date[2] == 'PM' and str(from_date[1][:2]) != '12':
+            time = str(int(from_date[1][:2]) + 12) + str(from_date[1][2:])
+        else:
+            time = from_date[1]
         print(x[2] + ',' + time + ',' + x[7] + ',' + x[8] + ',' + x[13], file = new_data)
