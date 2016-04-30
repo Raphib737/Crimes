@@ -1,8 +1,6 @@
-#Welcome to our CS105 Final Project! 
 
 #CS105 Final Report
-======
-*Written by Molly Shopper, Amalia Safer, Raphael Baysa
+*Written by Molly Shopper, Amalia Safer, Raphael Baysa | 
 mshop@bu.edu, asafer@bu.edu, raph737@bu.edu*
 
 ##Introduction
