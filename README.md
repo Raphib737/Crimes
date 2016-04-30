@@ -45,9 +45,9 @@ Earlier in the report, we mentioned that time of day is a better predictor of ty
 
 We created some graphics to show how many crimes are happening at different times of day and different days of the week, as well as a graph to show which crimes happen more.
 
-![Alt text](https://github.com/Raphib737/Crimes/blob/master/Graphs/CrimesCommitedbyType.png raw=true "Crimes per Day")
-![Alt text](https://github.com/Raphib737/Crimes/blob/master/Graphs/CrimesCommitedperHour.png raw=true "Crimes per Hour")
-![Alt text](https://github.com/Raphib737/Crimes/blob/master/Graphs/CrimesCommittedperDay.png raw=true "Types of Crime")
+![Alt tag](https://github.com/Raphib737/Crimes/blob/master/Graphs/CrimesCommitedbyType.png)
+![Alt tag](https://github.com/Raphib737/Crimes/blob/master/Graphs/CrimesCommitedperHour.png)
+![Alt tag](https://github.com/Raphib737/Crimes/blob/master/Graphs/CrimesCommittedperDay.png)
 
 
 Conclusions:  Unfortunately, the data mining model’s accuracy rate was low, showing that it is difficult to predict what types of crimes are occurring on any given day or time. However, the sql commands and graphics show that some times and days have more crimes than others. More crimes (of all types) occur later in the day. Also, Fridays have slightly more crime than other days of the week, and Sundays have less. Police forces can use this information to best utilize their staff - more officers should be out on Fridays than on Sundays. As far as the type of crime occurring, they’ll just have to be ready for anything!
